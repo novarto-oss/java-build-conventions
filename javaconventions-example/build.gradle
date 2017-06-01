@@ -1,0 +1,34 @@
+group 'com.novarto.example'
+version '0.9-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+        mavenLocal()
+    }
+    dependencies {
+        classpath group: 'com.novarto', name: 'java-conventions',
+                version: '0.9-SNAPSHOT'
+    }
+}
+apply plugin: 'com.novarto.javaconventions'
+
+dependencies {
+    //if you uncomment this line, the build will fail, because failOnVersionConflict() is configured
+    // works for direct or transitive dependencies
+//    testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task printEnv() {
+    doLast {
+        println('env=================')
+        println("sourceCompat: $compileJava.sourceCompatibility")
+        println("repositories: $repositories")
+        println('====================')
+    }
+}
+
+check.dependsOn(printEnv)
+
