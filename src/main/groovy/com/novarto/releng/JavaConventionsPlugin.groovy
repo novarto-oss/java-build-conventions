@@ -2,7 +2,6 @@ package com.novarto.releng
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.internal.resources.DefaultTextResourceFactory
 import org.gradle.api.tasks.bundling.Jar
 
 class JavaConventionsPlugin implements Plugin<Project> {
@@ -61,13 +60,20 @@ class JavaConventionsPlugin implements Plugin<Project> {
             }
         }
 
+        //checks only enabled during continuous integration build, but not during local build
         target.afterEvaluate {
             if(target.javaconventions.ci)
             {
-                target.pluginManager.apply('findbugs')
-            }
 
+                //findbugs
+                target.pluginManager.apply('findbugs')
+                target.findbugs {
+                    toolVersion = "3.0.1"
+                    ignoreFailures = false
+                }
+            }
         }
+
 
 
 
