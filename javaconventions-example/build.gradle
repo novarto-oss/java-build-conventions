@@ -17,7 +17,7 @@ buildscript {
 apply plugin: 'com.novarto.javaconventions'
 
 javaconventions {
-    ci=false // default, set to true to enable continuous integration checks - findbugs
+    ci = System.getProperty("ci")!=null
 }
 
 dependencies {

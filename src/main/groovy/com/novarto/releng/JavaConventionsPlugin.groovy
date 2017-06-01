@@ -2,6 +2,7 @@ package com.novarto.releng
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.plugins.quality.FindBugs
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 
@@ -91,6 +92,13 @@ class JavaConventionsPlugin implements Plugin<Project> {
                 target.findbugs {
                     toolVersion = "3.0.1"
                     ignoreFailures = false
+                }
+
+                target.tasks.withType(FindBugs) {
+                    reports {
+                        html.enabled = true
+                        xml.enabled = false
+                    }
                 }
 
 
