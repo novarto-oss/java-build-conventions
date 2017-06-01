@@ -15,7 +15,6 @@ dependencies {
     compile localGroovy()
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile gradleTestKit()
-    runtime 'com.fizzpod:gradle-pater-build-plugin:1.0.0'
 }
 
 apply plugin: 'groovy'

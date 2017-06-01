@@ -16,9 +16,9 @@ buildscript {
 
 apply plugin: 'com.novarto.javaconventions'
 
-//javaconventions {
-//    ci=true
-//}
+javaconventions {
+    ci=false // default, set to true to enable continuous integration checks - findbugs and jacoco
+}
 
 dependencies {
     //if you uncomment this line, the build will fail, because failOnVersionConflict() is configured
@@ -31,7 +31,10 @@ task printEnv() {
     doLast {
         println('env=================')
         println("sourceCompat: $compileJava.sourceCompatibility")
-        println("repositories: $repositories")
+
+        def repos = repositories.collect{x -> x.name}
+
+        println("repositories: ${repos}")
         println('====================')
     }
 }
