@@ -10,8 +10,11 @@ class JavaConventionsPlugin implements Plugin<Project> {
     @Override
     void apply(Project target) {
 
+        target.extensions.create('javaconventions', Config)
+
         target.pluginManager.apply("java")
         target.pluginManager.apply("maven")
+
 
         // common repos boilerplate
         target.repositories {
@@ -58,5 +61,21 @@ class JavaConventionsPlugin implements Plugin<Project> {
             }
         }
 
+        target.afterEvaluate {
+            if(target.javaconventions.ci)
+            {
+                target.pluginManager.apply('findbugs')
+            }
+
+        }
+
+
+
     }
+
+
+}
+
+class Config {
+        def boolean ci = false
 }

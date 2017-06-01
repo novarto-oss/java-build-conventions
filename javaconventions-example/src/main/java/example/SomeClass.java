@@ -13,7 +13,7 @@ public class SomeClass
     }
 
 
-    //uncomment this to see that checkstyle is configured with our default template
+    //uncomment this and run `gradlew check` to see that checkstyle is configured with our default template
 //    public void breaksCheckstyle() {
 //    }
 }

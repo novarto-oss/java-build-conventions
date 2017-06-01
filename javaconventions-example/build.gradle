@@ -12,7 +12,13 @@ buildscript {
                 version: '0.9-SNAPSHOT'
     }
 }
+
+
 apply plugin: 'com.novarto.javaconventions'
+
+//javaconventions {
+//    ci=true
+//}
 
 dependencies {
     //if you uncomment this line, the build will fail, because failOnVersionConflict() is configured
