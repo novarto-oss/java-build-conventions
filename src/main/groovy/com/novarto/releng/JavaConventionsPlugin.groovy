@@ -60,7 +60,13 @@ class JavaConventionsPlugin implements Plugin<Project> {
             }
         }
 
-        //checks only enabled during continuous integration build, but not during local build
+        //code coverage
+        target.pluginManager.apply( 'jacoco')
+        target.check.dependsOn target.jacocoTestReport
+
+
+
+    //checks only enabled during continuous integration build, but not during local build
         target.afterEvaluate {
             if(target.javaconventions.ci)
             {
@@ -71,6 +77,9 @@ class JavaConventionsPlugin implements Plugin<Project> {
                     toolVersion = "3.0.1"
                     ignoreFailures = false
                 }
+
+
+
             }
         }
 
