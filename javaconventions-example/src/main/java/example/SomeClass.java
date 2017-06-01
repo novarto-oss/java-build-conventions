@@ -7,7 +7,7 @@ public class SomeClass
      * A very useful method
      * @return the meaning
      */
-    public int foo()
+    public static int foo()
     {
         return 42;
     }

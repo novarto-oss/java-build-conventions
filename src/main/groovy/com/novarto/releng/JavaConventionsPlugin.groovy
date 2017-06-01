@@ -3,6 +3,7 @@ package com.novarto.releng
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.bundling.Jar
+import org.gradle.api.tasks.testing.Test
 
 class JavaConventionsPlugin implements Plugin<Project> {
 
@@ -55,18 +56,32 @@ class JavaConventionsPlugin implements Plugin<Project> {
             config = checkstyleConfig
             toolVersion = "7.0"
             ignoreFailures = false
-            if (target.hasProperty("checkstyle.ignoreFailures")) {
-                ignoreFailures = rootProject.properties["checkstyle.ignoreFailures"].toBoolean()
-            }
         }
 
         //code coverage
         target.pluginManager.apply( 'jacoco')
         target.check.dependsOn target.jacocoTestReport
 
+        //javadoc - make sure jdk links work
+        target.javadoc.options {
+            encoding = 'UTF-8'
+            links 'https://docs.oracle.com/javase/8/docs/api/'
+        }
+
+        //show full traces during tests
+        target.tasks.withType(Test) {
+            testLogging {
+                exceptionFormat = 'full'
+                showExceptions true
+                showCauses true
+                showStackTraces true
+                showStandardStreams true
+            }
+        }
 
 
-    //checks only enabled during continuous integration build, but not during local build
+
+        //checks only enabled during continuous integration build, but not during local build
         target.afterEvaluate {
             if(target.javaconventions.ci)
             {
@@ -92,5 +107,5 @@ class JavaConventionsPlugin implements Plugin<Project> {
 }
 
 class Config {
-        def boolean ci = false
+    def boolean ci = false
 }
