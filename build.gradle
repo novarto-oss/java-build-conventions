@@ -1,9 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+}
+
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+    id 'java-gradle-plugin'
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
 group 'com.novarto'
 version '0.9-SNAPSHOT'
-
-apply plugin: 'groovy'
-apply plugin: 'java-gradle-plugin'
-
 
 repositories {
     mavenCentral()
@@ -15,7 +26,8 @@ dependencies {
     compile localGroovy()
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile gradleTestKit()
-}
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
+    // we add bintray as a runtime dependency, so that clients do not have to specify it via
+    // { buildscript { dependencies
+    runtime 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+}

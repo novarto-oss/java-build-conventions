@@ -14,7 +14,7 @@ class JavaConventionsPlugin implements Plugin<Project> {
         target.extensions.create('javaconventions', Config)
 
         target.pluginManager.apply("java")
-        target.pluginManager.apply("maven")
+        target.pluginManager.apply("maven-publish")
 
 
         // common repos boilerplate
@@ -22,6 +22,11 @@ class JavaConventionsPlugin implements Plugin<Project> {
             mavenCentral()
             jcenter()
         }
+
+
+        //bintray support
+        //TODO maybe make optional via config
+        target.pluginManager.apply('com.jfrog.bintray')
 
         // java 8, strict mode
         [target.compileJava, target.compileTestJava].each() {
@@ -47,6 +52,7 @@ class JavaConventionsPlugin implements Plugin<Project> {
             archives target.sourcesJar
         }
 
+        //predefined checkstyle config coming from plugin
         def checkstyleConfig = target.resources.text.fromString(
                 getClass().getResourceAsStream("/checkstyle_config.xml").withCloseable {x -> x.text})
 
