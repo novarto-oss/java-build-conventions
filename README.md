@@ -1,5 +1,5 @@
 # java-build-conventions
-A set of gradle build conventions to eliminate gradle boilerplate and enforce coding standards
+A set of gradle build conventions to eliminate build boilerplate and enforce coding standards
 
 # How to use
 // TODO add gradle snippet when we have bintray snapshots
