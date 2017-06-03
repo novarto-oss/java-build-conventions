@@ -3,6 +3,7 @@ package com.novarto.releng
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.FindBugs
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 
@@ -14,7 +15,17 @@ class JavaConventionsPlugin implements Plugin<Project> {
         target.extensions.create('javaconventions', Config)
 
         target.pluginManager.apply("java")
+
         target.pluginManager.apply("maven-publish")
+
+        //set up jar publication
+        target.publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from target.components.java
+                }
+            }
+        }
 
 
         // common repos boilerplate
