@@ -77,6 +77,9 @@ publishing {
     }
 }
 
+def publishUser = System.getenv('PUBLISH_USER')
+def publishKey = System.getenv('PUBLISH_KEY')
+
 
 if(isSnapshot) {
     artifactory {
@@ -84,8 +87,8 @@ if(isSnapshot) {
             contextUrl = 'https://oss.jfrog.org/artifactory'
             repository {
                 repoKey = 'oss-snapshot-local'
-                username = System.getenv('BINTRAY_USER')
-                password = System.getenv('BINTRAY_KEY')
+                username = publishUser
+                password = publishKey
             }
 
             defaults {
@@ -98,8 +101,8 @@ else {
 
     bintray {
 
-        user = System.getenv('BINTRAY_USER')
-        key = System.getenv('BINTRAY_KEY')
+        user = publishUser
+        key = publishKey
 
 
         pkg {
