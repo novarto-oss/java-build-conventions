@@ -4,6 +4,11 @@ buildscript {
         jcenter()
     }
 
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.4.18'
+    }
+
 }
 
 plugins {
@@ -11,16 +16,29 @@ plugins {
     id 'groovy'
     id 'maven-publish'
     id 'java-gradle-plugin'
-    id "com.jfrog.bintray" version "1.7.3"
 }
 
 group 'com.novarto'
-version '0.9'
+version '0.9.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
     jcenter()
 }
+
+
+def isSnapshot = version.toString().endsWith("SNAPSHOT")
+
+if(isSnapshot)
+{
+    apply plugin: 'com.jfrog.artifactory'
+}
+else
+{
+    apply plugin: 'com.jfrog.bintray'
+
+}
+
 
 task('sourcesJar', type: Jar) {
     classifier = 'sources'
@@ -41,6 +59,8 @@ dependencies {
     // we add bintray as a runtime dependency, so that clients do not have to specify it via
     // { buildscript { dependencies
     runtime 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    runtime 'org.jfrog.buildinfo:build-info-extractor-gradle:4.4.18'
+
 }
 
 publishing {
@@ -58,24 +78,44 @@ publishing {
 }
 
 
-bintray {
+if(isSnapshot) {
+    artifactory {
+        publish {
+            contextUrl = 'https://oss.jfrog.org/artifactory'
+            repository {
+                repoKey = 'oss-snapshot-local'
+                username = System.getenv('BINTRAY_USER')
+                password = System.getenv('BINTRAY_KEY')
+            }
 
-    user = System.getenv('BINTRAY_USER')
-    key = System.getenv('BINTRAY_KEY')
-
-
-    pkg {
-        repo = 'novarto-oss-snapshots'
-        name = 'java-build-conventions'
-        userOrg = 'novarto-oss'
-        licenses = ['Apache-2.0']
-        vcsUrl = 'https://github.com/novarto-oss/java-build-conventions.git'
-
-        version {
-            name = project.version
+            defaults {
+                publications('mavenJava')
+            }
         }
     }
+}
+else {
 
-    publications = ['mavenJava']
+    bintray {
+
+        user = System.getenv('BINTRAY_USER')
+        key = System.getenv('BINTRAY_KEY')
+
+
+        pkg {
+            repo = 'novarto-oss-snapshots'
+            name = 'java-build-conventions'
+            userOrg = 'novarto-oss'
+            licenses = ['Apache-2.0']
+            vcsUrl = 'https://github.com/novarto-oss/java-build-conventions.git'
+
+            version {
+                name = project.version
+            }
+        }
+
+        publications = ['mavenJava']
+
+    }
 
 }

@@ -113,36 +113,6 @@ class JavaConventionsPlugin implements Plugin<Project> {
         }
 
 
-        def envUser = System.getenv('BINTRAY_USER')
-
-        //bintray support
-
-        target.pluginManager.apply('com.jfrog.bintray')
-
-        target.bintray {
-
-            user = envUser
-            key = System.getenv('BINTRAY_KEY')
-
-            pkg {
-                repo = 'novarto-oss-snapshots'
-                userOrg = 'novarto-oss'
-
-                licenses = ['Apache-2.0']
-
-                version {
-                    name = target.version
-                }
-
-            }
-
-            publications = ['mavenJava']
-
-        }
-
-
-
-
 
         //checks only enabled during continuous integration build, but not during local build
         target.afterEvaluate {

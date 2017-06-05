@@ -7,15 +7,16 @@ buildscript {
     dependencies {
 
         classpath group: 'com.novarto', name: 'java-conventions',
-                version: '0.9'
+                version: '0.9.1-SNAPSHOT'
     }
 }
 
 
 group 'com.novarto.example'
-version '0.9-SNAPSHOT'
+version '0.9'
 
 apply plugin: 'com.novarto.javaconventions'
+apply plugin: 'com.novarto.osspublish'
 
 
 javaconventions {
