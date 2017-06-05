@@ -3,6 +3,7 @@ package com.novarto.releng
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.FindBugs
+import org.gradle.api.publish.maven.MavenPublication
 import org.gradle.api.tasks.bundling.Jar
 import org.gradle.api.tasks.testing.Test
 
@@ -14,7 +15,17 @@ class JavaConventionsPlugin implements Plugin<Project> {
         target.extensions.create('javaconventions', Config)
 
         target.pluginManager.apply("java")
-        target.pluginManager.apply("maven")
+
+        target.pluginManager.apply("maven-publish")
+
+        //set up jar publication
+        target.publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from target.components.java
+                }
+            }
+        }
 
 
         // common repos boilerplate
@@ -22,6 +33,11 @@ class JavaConventionsPlugin implements Plugin<Project> {
             mavenCentral()
             jcenter()
         }
+
+
+        //bintray support
+        //TODO maybe make optional via config
+        target.pluginManager.apply('com.jfrog.bintray')
 
         // java 8, strict mode
         [target.compileJava, target.compileTestJava].each() {
@@ -47,6 +63,7 @@ class JavaConventionsPlugin implements Plugin<Project> {
             archives target.sourcesJar
         }
 
+        //predefined checkstyle config coming from plugin
         def checkstyleConfig = target.resources.text.fromString(
                 getClass().getResourceAsStream("/checkstyle_config.xml").withCloseable {x -> x.text})
 

@@ -1,9 +1,20 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+}
+
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+    id 'java-gradle-plugin'
+    id "com.jfrog.bintray" version "1.7.3"
+}
+
 group 'com.novarto'
 version '0.9-SNAPSHOT'
-
-apply plugin: 'groovy'
-apply plugin: 'java-gradle-plugin'
-
 
 repositories {
     mavenCentral()
@@ -15,7 +26,27 @@ dependencies {
     compile localGroovy()
     testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile gradleTestKit()
+
+    // we add bintray as a runtime dependency, so that clients do not have to specify it via
+    // { buildscript { dependencies
+    runtime 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 }
 
-apply plugin: 'groovy'
-apply plugin: 'maven'
+bintray {
+
+    user = System.getenv('BINTRAY_USER')
+    key = System.getenv('BINTRAY_KEY')
+
+
+    pkg {
+        repo = 'novarto-oss-snapshots'
+        name = 'java-build-conventions'
+        userOrg = 'novarto-oss'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/novarto-oss/java-build-conventions.git'
+
+        version {
+            name = project.version
+        }
+    }
+}
