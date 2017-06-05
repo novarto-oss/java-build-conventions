@@ -12,10 +12,11 @@ buildscript {
 }
 
 
-apply plugin: 'com.novarto.javaconventions'
-
 group 'com.novarto.example'
 version '0.9-SNAPSHOT'
+
+apply plugin: 'com.novarto.javaconventions'
+
 
 javaconventions {
     ci = System.getProperty("ci")!=null

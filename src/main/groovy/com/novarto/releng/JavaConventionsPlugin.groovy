@@ -1,5 +1,6 @@
 package com.novarto.releng
 
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.FindBugs
@@ -11,6 +12,11 @@ class JavaConventionsPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project target) {
+
+        if(target.version == Project.DEFAULT_VERSION)
+        {
+            throw new GradleException("unspecified project version. Please define version before applying plugin")
+        }
 
         target.extensions.create('javaconventions', Config)
 
@@ -26,30 +32,6 @@ class JavaConventionsPlugin implements Plugin<Project> {
         }
 
 
-        //bintray support
-        target.pluginManager.apply('com.jfrog.bintray')
-
-
-        target.bintray {
-
-            user = System.getenv('BINTRAY_USER')
-            key = System.getenv('BINTRAY_KEY')
-
-            pkg {
-                repo = 'novarto-oss-snapshots'
-                userOrg = 'novarto-oss'
-
-                licenses = ['Apache-2.0']
-
-                version {
-                    name = project.version
-                }
-
-            }
-
-            publications = ['mavenJava']
-
-        }
 
         // java 8, strict mode
         [target.compileJava, target.compileTestJava].each() {
@@ -129,6 +111,36 @@ class JavaConventionsPlugin implements Plugin<Project> {
                 showStandardStreams true
             }
         }
+
+
+        def envUser = System.getenv('BINTRAY_USER')
+
+        //bintray support
+
+        target.pluginManager.apply('com.jfrog.bintray')
+
+        target.bintray {
+
+            user = envUser
+            key = System.getenv('BINTRAY_KEY')
+
+            pkg {
+                repo = 'novarto-oss-snapshots'
+                userOrg = 'novarto-oss'
+
+                licenses = ['Apache-2.0']
+
+                version {
+                    name = target.version
+                }
+
+            }
+
+            publications = ['mavenJava']
+
+        }
+
+
 
 
 
