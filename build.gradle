@@ -7,6 +7,7 @@ buildscript {
 }
 
 plugins {
+    id 'java'
     id 'groovy'
     id 'maven-publish'
     id 'java-gradle-plugin'
@@ -14,11 +15,21 @@ plugins {
 }
 
 group 'com.novarto'
-version '0.9-SNAPSHOT'
+version '0.9'
 
 repositories {
     mavenCentral()
     jcenter()
+}
+
+task('sourcesJar', type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+
+artifacts {
+    archives sourcesJar
 }
 
 dependencies {
@@ -31,6 +42,21 @@ dependencies {
     // { buildscript { dependencies
     runtime 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
 }
+
+publishing {
+    publications {
+
+
+        mavenJava(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            groupId project.group
+            artifactId project.name
+            version project.version
+        }
+    }
+}
+
 
 bintray {
 

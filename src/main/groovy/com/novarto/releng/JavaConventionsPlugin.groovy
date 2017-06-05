@@ -18,15 +18,6 @@ class JavaConventionsPlugin implements Plugin<Project> {
 
         target.pluginManager.apply("maven-publish")
 
-        //set up jar publication
-        target.publishing {
-            publications {
-                mavenJava(MavenPublication) {
-                    from target.components.java
-                }
-            }
-        }
-
 
         // common repos boilerplate
         target.repositories {
@@ -85,6 +76,27 @@ class JavaConventionsPlugin implements Plugin<Project> {
             encoding = 'UTF-8'
             links 'https://docs.oracle.com/javase/8/docs/api/'
         }
+
+        //generate sources jar
+        target.task('javadocJar', type: Jar) {
+            classifier = 'javadoc'
+            from target.javadoc.destinationDir
+        }
+
+        //set up jar publication
+        target.publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from target.components.java
+                    artifact target.sourcesJar
+                    artifact target.javadocJar
+                    groupId target.group
+                    artifactId target.name
+                    version target.version
+                }
+            }
+        }
+
 
         //show full traces during tests
         target.tasks.withType(Test) {
