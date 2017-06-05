@@ -14,22 +14,23 @@ class OssPublishPlugin  implements Plugin<Project> {
             throw new GradleException("unspecified project version. Please define version before applying plugin")
         }
 
-        def publishUser = System.getenv('PUBLISH_USER')
-        def publishKey = System.getenv('PUBLISH_KEY')
-
-        if (publishUser==null || publishKey==null)
-        {
-            println("will not add artifactory / bintray publish task since PUBLISH_USER or PUBLISH_KEY env var is not set")
-            return
-        }
-
-        def isSnapshot = target.version.toString().endsWith("SNAPSHOT")
-
         target.pluginManager.apply('com.jfrog.bintray')
         target.pluginManager.apply('com.jfrog.artifactory')
 
+        def publishUser = System.getenv('PUBLISH_USER')
+        def publishKey = System.getenv('PUBLISH_KEY')
+        def publishEnvIsSet = publishUser!=null && publishKey!=null
+
+        def isSnapshot = target.version.toString().endsWith("SNAPSHOT")
+
+        if(!publishEnvIsSet)
+        {
+            println("PUBLISH_USER or PUBLISH_KEY ENV is not set. Will not configure snapshot or release build")
+            return
+        }
 
         if (isSnapshot) {
+            println("Snapshot version ${target.version} is set for ${target.name}. Configuring publish to oss-snapshot-local")
             //artifactory support
             target.artifactory {
                 publish {
@@ -51,6 +52,7 @@ class OssPublishPlugin  implements Plugin<Project> {
         else {
             //bintray support
 
+            println("Release version ${target.version} is set for ${target.name}. Configuring publish to bintray")
             target.bintray {
 
                 user = publishUser

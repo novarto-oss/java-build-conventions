@@ -2,7 +2,11 @@ buildscript {
     repositories {
         mavenCentral()
         jcenter()
-        mavenLocal()
+        //uncomment if you want to test against locally published plugin
+//        mavenLocal()
+        maven {
+            url 'https://oss.jfrog.org/artifactory/libs-snapshot/'
+        }
     }
     dependencies {
 
@@ -13,7 +17,7 @@ buildscript {
 
 
 group 'com.novarto.example'
-version '0.9'
+version '0.9-SNAPSHOT'
 
 apply plugin: 'com.novarto.javaconventions'
 apply plugin: 'com.novarto.osspublish'
