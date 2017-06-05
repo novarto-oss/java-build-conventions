@@ -75,4 +75,7 @@ bintray {
             name = project.version
         }
     }
+
+    publications = ['mavenJava']
+
 }

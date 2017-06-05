@@ -21,6 +21,7 @@ javaconventions {
     ci = System.getProperty("ci")!=null
 }
 
+
 dependencies {
     //if you uncomment this line, the build will fail, because failOnVersionConflict() is configured
     // works for direct or transitive dependencies
@@ -37,6 +38,8 @@ task printEnv() {
 
         println("repositories: ${repos}")
         println('====================')
+
+        println("bintray repo: ${bintray.pkg.repo}")
     }
 }
 

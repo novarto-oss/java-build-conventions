@@ -27,8 +27,29 @@ class JavaConventionsPlugin implements Plugin<Project> {
 
 
         //bintray support
-        //TODO maybe make optional via config
         target.pluginManager.apply('com.jfrog.bintray')
+
+
+        target.bintray {
+
+            user = System.getenv('BINTRAY_USER')
+            key = System.getenv('BINTRAY_KEY')
+
+            pkg {
+                repo = 'novarto-oss-snapshots'
+                userOrg = 'novarto-oss'
+
+                licenses = ['Apache-2.0']
+
+                version {
+                    name = project.version
+                }
+
+            }
+
+            publications = ['mavenJava']
+
+        }
 
         // java 8, strict mode
         [target.compileJava, target.compileTestJava].each() {
@@ -145,4 +166,5 @@ class JavaConventionsPlugin implements Plugin<Project> {
 
 class Config {
     def boolean ci = false
+
 }
